@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Murc-IA</title>
+  <!-- Tipografía moderna -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --rojo: #df4a4a;
+      --granate: #7d1128;
+      --negro: #080808;
+      --gris-card: #19191a;
+      --gris-borde: #232324;
+      --blanco: #fff;
+    }
+    body {
+      font-family: 'Poppins', 'Inter', Arial, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(120deg, var(--negro) 75%, var(--granate) 120%);
+      color: var(--blanco);
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+    header {
+      padding: 4rem 2rem 2.5rem;
+      text-align: center;
+      background: transparent;
+      border-bottom: 1.5px solid var(--gris-borde);
+      position: relative;
+    }
+    header img {
+      width: 110px;
+      margin-bottom: 1.3rem;
+      filter: drop-shadow(0 3px 16px #df4a4a33);
+    }
+    header h1 {
+      font-size: 2.6rem;
+      font-weight: 700;
+      margin-bottom: .5rem;
+      letter-spacing: -2px;
+    }
+    header p {
+      color: #fff9;
+      font-size: 1.12rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    /* BOTONES FLOTANTES */
+    .floating-buttons {
+      position: fixed;
+      bottom: 22px;
+      right: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      z-index: 99;
+    }
+    .floating-buttons a {
+      width: 52px; height: 52px;
+      background: #fff;
+      color: var(--rojo);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 14px #0005;
+      transition: transform 0.18s, background 0.22s, color 0.22s;
+      font-size: 1.7rem;
+      border: 2px solid var(--rojo);
+    }
+    .floating-buttons a:hover {
+      background: var(--rojo);
+      color: #fff;
+      transform: scale(1.09);
+    }
+    .floating-buttons img {
+      width: 26px; height: 26px;
+    }
+    section {
+      padding: 4rem 2rem 2rem;
+      max-width: 1100px;
+      margin: auto;
+    }
+    /* BENEFICIOS */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+      gap: 2.2rem;
+      margin-bottom: 3rem;
+    }
+    .benefit {
+      background: var(--gris-card);
+      border-radius: 16px;
+      border: 1.5px solid var(--gris-borde);
+      box-shadow: 0 2px 24px #df4a4a14;
+      padding: 1.5rem 1.1rem;
+      transition: border-color 0.23s, box-shadow 0.23s;
+      cursor: pointer;
+      overflow: hidden;
+      position: relative;
+    }
+    .benefit h2 {
+      color: #fff;
+      font-size: 1.07rem;
+      margin: 0 0 .2rem 0;
+      transition: color 0.25s;
+    }
+    .benefit:hover h2 {
+      color: var(--rojo);
+    }
+    .benefit p {
+      opacity: 0;
+      max-height: 0;
+      margin: 0;
+      color: #fffde9;
+      font-size: 1.02rem;
+      transition: opacity 0.34s, max-height 0.34s;
+    }
+    .benefit:hover, .benefit.active {
+      border-color: var(--rojo);
+      box-shadow: 0 2px 24px #df4a4a49;
+    }
+    .benefit:hover p, .benefit.active p {
+      opacity: 1;
+      max-height: 160px;
+      margin-top: .6rem;
+    }
+    /* DESPLEGABLES (QUIENES SOMOS & ENFOQUE) */
+    .collapsible {
+      background: var(--gris-card);
+      border-radius: 18px;
+      margin: 0 0 1.5rem 0;
+      border: 1.8px solid var(--gris-borde);
+      box-shadow: 0 4px 24px #df4a4a10;
+      overflow: hidden;
+      transition: border-color 0.26s;
+    }
+    .collapsible-title {
+      cursor: pointer;
+      padding: 1.5rem 1.8rem 1.3rem 2.1rem;
+      font-size: 1.32rem;
+      font-weight: 700;
+      color: #fff;
+      background: transparent;
+      border: none;
+      text-align: left;
+      width: 100%;
+      letter-spacing: -0.5px;
+      outline: none;
+      transition: color 0.25s, background 0.25s;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .collapsible-title:hover, .collapsible.active .collapsible-title {
+      color: var(--rojo);
+      background: #22101222;
+    }
+    .collapsible-content {
+      max-height: 0;
+      opacity: 0;
+      padding: 0 2.1rem;
+      font-size: 1.06rem;
+      color: #fffde9;
+      transition: max-height 0.38s cubic-bezier(.65,.04,.35,1), opacity 0.4s;
+      overflow: hidden;
+    }
+    .collapsible.active .collapsible-content {
+      max-height: 400px;
+      opacity: 1;
+      padding-bottom: 2rem;
+      margin-top: -0.7rem;
+    }
+    .collapsible .arrow {
+      font-size: 1.3rem;
+      margin-left: auto;
+      color: #fff;
+      transition: color 0.23s, transform 0.33s;
+      transform: rotate(0deg);
+    }
+    .collapsible.active .arrow {
+      color: var(--rojo);
+      transform: rotate(90deg);
+    }
+    /* FAQ SECCIÓN */
+    .faq-title {
+      font-size: 1.35rem;
+      margin-bottom: 1.6rem;
+      letter-spacing: -1px;
+      text-align: left;
+    }
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 1.6rem;
+    }
+    .faq-card {
+      background: var(--gris-card);
+      border-radius: 14px;
+      border: 1.2px solid var(--gris-borde);
+      box-shadow: 0 2px 14px #df4a4a12;
+      padding: 1.15rem 1.15rem;
+      transition: border-color 0.2s, box-shadow 0.22s;
+      cursor: pointer;
+      position: relative;
+      min-height: 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    .faq-question {
+      color: #fff;
+      font-size: 1.02rem;
+      margin: 0;
+      transition: color 0.22s;
+      font-weight: 600;
+    }
+    .faq-card:hover .faq-question,
+    .faq-card.open .faq-question {
+      color: var(--rojo);
+    }
+    .faq-answer {
+      opacity: 0;
+      max-height: 0;
+      color: #fffde9;
+      font-size: .98rem;
+      margin: 0;
+      transition: opacity 0.36s, max-height 0.36s;
+      overflow: hidden;
+    }
+    .faq-card:hover .faq-answer,
+    .faq-card.open .faq-answer {
+      opacity: 1;
+      max-height: 140px;
+      margin-top: .65rem;
+    }
+    /* CTA */
+    .cta {
+      background: linear-gradient(90deg, #df4a4a33, #1a1a1a, #df4a4a22);
+      border: 1px solid #df4a4a55;
+      padding: 2.8rem 1rem;
+      text-align: center;
+      border-radius: 12px;
+      margin: 4rem auto 2rem auto;
+      max-width: 600px;
+      box-shadow: 0 4px 26px #df4a4a10;
+    }
+    .cta h2 {
+      color: #fff;
+      margin-bottom: 1rem;
+      font-size: 1.28rem;
+    }
+    .cta a {
+      background: var(--rojo);
+      color: #fff;
+      padding: .9rem 1.7rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: .5px;
+      font-size: 1.13rem;
+      transition: background 0.24s;
+      box-shadow: 0 2px 18px #df4a4a23;
+      display: inline-block;
+      margin-top: 1rem;
+    }
+    .cta a:hover {
+      background: #a91919;
+    }
+    /* FORMULARIO */
+    .formulario {
+      max-width: 460px;
+      margin: 3rem auto 2rem auto;
+      background: var(--gris-card);
+      padding: 2rem 1.3rem 1.4rem 1.3rem;
+      border-radius: 12px;
+      border: 1px solid var(--rojo);
+      box-shadow: 0 2px 26px #df4a4a10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .formulario form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .formulario input, .formulario textarea {
+      width: 100%;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border: 1.2px solid #df4a4a55;
+      border-radius: 8px;
+      background: #19191a;
+      color: white;
+      font-size: 1rem;
+      transition: border 0.19s;
+      box-sizing: border-box;
+      display: block;
+    }
+    .formulario input:focus, .formulario textarea:focus {
+      border: 1.2px solid var(--rojo);
+      outline: none;
+    }
+    .formulario button {
+      width: 100%;
+      padding: 1rem;
+      background: var(--rojo);
+      color: white;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.07rem;
+      cursor: pointer;
+      transition: background 0.23s;
+      letter-spacing: .5px;
+      box-shadow: 0 2px 10px #df4a4a14;
+    }
+    .formulario button:hover {
+      background: #a91919;
+    }
+    /* Responsive */
+    @media (max-width: 900px) {
+      .faq-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 650px) {
+      header h1 { font-size: 2rem;}
+      .faq-title { font-size: 1.07rem;}
+      .formulario { max-width: 99vw; }
+      section { padding: 2.2rem 0.5rem;}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="murc-ia.png" alt="Logo Murc-IA">
+    <h1>Bienvenido a Murc-IA</h1>
+    <p>Automatiza, ahorra tiempo y haz crecer tu pyme con soluciones tecnológicas diseñadas para negocios como el tuyo. Somos de Murcia y trabajamos contigo, a tu ritmo.</p>
+  </header>
+
+  <div class="floating-buttons">
+    <a href="https://wa.me/34640689184" target="_blank" title="WhatsApp">
+      <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/whatsapp.svg" alt="WhatsApp">
+    </a>
+    <a href="https://instagram.com/murcia.mkt" target="_blank" title="Instagram">
+      <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram">
+    </a>
+  </div>
+
+  <section>
+    <div class="grid">
+      <div class="benefit">
+        <h2>💬 Chatbots inteligentes</h2>
+        <p>Atiende a tus clientes 24/7 sin esfuerzo. Personalizamos bots que entienden tu negocio y responden como tú lo harías.</p>
+      </div>
+      <div class="benefit">
+        <h2>📅 Reservas automáticas</h2>
+        <p>Olvídate de llamadas y agendas desordenadas. Gestionamos tus citas de forma autónoma y sincronizada.</p>
+      </div>
+      <div class="benefit">
+        <h2>📧 Emails y recordatorios</h2>
+        <p>Desde confirmaciones hasta seguimientos. Tus clientes siempre informados sin que tú tengas que escribir ni una línea.</p>
+      </div>
+      <div class="benefit">
+        <h2>📱 WhatsApp integrado</h2>
+        <p>Automatiza respuestas y flujos por WhatsApp para no perder oportunidades ni clientes potenciales.</p>
+      </div>
+      <div class="benefit">
+        <h2>👥 Gestión de RRHH</h2>
+        <p>Automatiza entrevistas, seguimientos, turnos y más. Libera tiempo de administración interna.</p>
+      </div>
+      <div class="benefit">
+        <h2>📲 Redes sociales</h2>
+        <p>Publicaciones, respuestas y métricas automatizadas para mantener tu presencia activa sin esfuerzo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DESPLEGABLES QUIÉNES SOMOS Y NUESTRO ENFOQUE -->
+  <section>
+    <div class="collapsible" id="quienes">
+      <div class="collapsible-title">
+        ¿Quiénes somos?
+        <span class="arrow">&#9654;</span>
+      </div>
+      <div class="collapsible-content">
+        Murc-IA es una empresa murciana nacida con un objetivo claro: ayudar a las pymes locales a evolucionar digitalmente sin perder su esencia. Somos expertos en automatización, pero sobre todo, entendemos las necesidades reales de negocios como peluquerías, clínicas dentales, academias, restaurantes o centros de estética. Estamos cerca, hablamos tu idioma y trabajamos como parte de tu equipo.
+      </div>
+    </div>
+    <div class="collapsible" id="enfoque">
+      <div class="collapsible-title">
+        Nuestro enfoque
+        <span class="arrow">&#9654;</span>
+      </div>
+      <div class="collapsible-content">
+        Nos diferenciamos por ofrecer soluciones personalizadas, orientadas a resultados medibles y con un acompañamiento cercano. Nada de plantillas genéricas: diseñamos planes a medida para tu negocio, y los adaptamos a tu día a día. Somos transparentes, ágiles y estamos en constante contacto contigo para asegurar que cada automatización funcione como debe.
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="faq-title">Preguntas frecuentes</div>
+    <div class="faq-grid">
+      <div class="faq-card">
+        <div class="faq-question">¿Qué tipo de empresas pueden beneficiarse de Murc-IA?</div>
+        <div class="faq-answer">Trabajamos especialmente con pymes de sectores como estética, restauración, salud, formación y comercio que quieren optimizar su tiempo y recursos.</div>
+      </div>
+      <div class="faq-card">
+        <div class="faq-question">¿Cuánto cuesta una automatización?</div>
+        <div class="faq-answer">Cada caso es único. Hacemos presupuestos personalizados según el número de procesos, el nivel de automatización y tus objetivos. Contacta sin compromiso.</div>
+      </div>
+      <div class="faq-card">
+        <div class="faq-question">¿Puedo seguir usando mis herramientas actuales?</div>
+        <div class="faq-answer">Sí. Nos integramos con tus sistemas actuales (Google, WhatsApp, CRM, redes sociales...) para no cambiar tu forma de trabajar, solo hacerla más eficaz.</div>
+      </div>
+      <div class="faq-card">
+        <div class="faq-question">¿Cómo sabré si está funcionando?</div>
+        <div class="faq-answer">Te damos acceso a reportes claros con métricas clave. Además, hacemos seguimiento contigo para ajustar y mejorar continuamente.</div>
+      </div>
+      <div class="faq-card">
+        <div class="faq-question">¿Dáis soporte después de implementar la automatización?</div>
+        <div class="faq-answer">Sí. Siempre tendrás acompañamiento para resolver dudas, ajustar procesos o añadir nuevas funciones según evolucione tu negocio.</div>
+      </div>
+      <div class="faq-card">
+        <div class="faq-question">¿Tenéis experiencia con negocios de mi sector?</div>
+        <div class="faq-answer">Tenemos experiencia real con pymes de Murcia en sectores como hostelería, estética, formación, clínicas, tiendas... adaptando cada solución a lo que necesitas.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <h2>¿Listo para llevar tu negocio a otro nivel?</h2>
+    <a href="#contacto">Contáctanos ahora</a>
+  </section>
+
+  <section class="formulario" id="contacto">
+    <form action="mailto:vitiaura2002@gmail.com" method="post" enctype="text/plain">
+      <input type="text" name="nombre" placeholder="Tu nombre" required />
+      <input type="email" name="email" placeholder="Tu correo electrónico" required />
+      <textarea name="mensaje" rows="5" placeholder="Cuéntanos qué necesitas..." required></textarea>
+      <button type="submit">Enviar mensaje</button>
+    </form>
+  </section>
+
+  <script>
+    // Desplegables para QUIENES SOMOS y NUESTRO ENFOQUE
+    document.querySelectorAll('.collapsible').forEach(function(card) {
+      card.querySelector('.collapsible-title').addEventListener('click', function() {
+        card.classList.toggle('active');
+        // Cerrar el otro si está abierto
+        document.querySelectorAll('.collapsible').forEach(function(other) {
+          if (other !== card) other.classList.remove('active');
+        });
+      });
+    });
+    // Hacer que los FAQ se abran/cierre al clickar (en móvil/táctil)
+    document.querySelectorAll('.faq-card').forEach(card => {
+      card.addEventListener('click', function() {
+        if(window.innerWidth < 900) {
+          document.querySelectorAll('.faq-card').forEach(c => { if(c!==card) c.classList.remove('open'); });
+          card.classList.toggle('open');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
